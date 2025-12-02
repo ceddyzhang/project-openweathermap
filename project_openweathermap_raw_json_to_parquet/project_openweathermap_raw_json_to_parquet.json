@@ -1,0 +1,40 @@
+{
+  "name" : "project_openweathermap_raw_json_to_parquet",
+  "jobMode" : "VISUAL",
+  "description" : "",
+  "role" : "arn:aws:iam::248189941692:role/service-role/AWSGlueServiceRole-openweathermap",
+  "executionProperty" : {
+    "maxConcurrentRuns" : 2
+  },
+  "command" : {
+    "name" : "glueetl",
+    "scriptLocation" : "s3://aws-glue-assets-248189941692-us-east-1/scripts/project_openweathermap_raw_json_to_parquet.py",
+    "pythonVersion" : "3"
+  },
+  "defaultArguments" : {
+    "--enable-metrics" : "true",
+    "--enable-spark-ui" : "true",
+    "--spark-event-logs-path" : "s3://aws-glue-assets-248189941692-us-east-1/sparkHistoryLogs/",
+    "--enable-job-insights" : "true",
+    "--enable-observability-metrics" : "true",
+    "--enable-glue-datacatalog" : "true",
+    "--job-bookmark-option" : "job-bookmark-enable",
+    "--job-language" : "python",
+    "--TempDir" : "s3://aws-glue-assets-248189941692-us-east-1/temporary/"
+  },
+  "maxRetries" : 0,
+  "allocatedCapacity" : 10,
+  "timeout" : 480,
+  "maxCapacity" : 10.0,
+  "glueVersion" : "5.0",
+  "numberOfWorkers" : 10,
+  "workerType" : "G.1X",
+  "executionClass" : "STANDARD",
+  "codeGenConfigurationNodes" : "{\"node-1764553579651\":{\"S3CatalogSource\":{\"AdditionalOptions\":{},\"Database\":\"openweathermap_db\",\"Name\":\"Raw JSON\",\"PartitionPredicate\":\"\",\"Table\":\"raw_currentweatherraw\"}},\"node-1764621313640\":{\"ApplyMapping\":{\"Inputs\":[\"node-1764553579651\"],\"Mapping\":[{\"Children\":[{\"Dropped\":false,\"FromPath\":[\"coord\",\"lon\"],\"FromType\":\"double\",\"ToKey\":\"lon\",\"ToType\":\"double\"},{\"Dropped\":false,\"FromPath\":[\"coord\",\"lat\"],\"FromType\":\"double\",\"ToKey\":\"lat\",\"ToType\":\"double\"}],\"Dropped\":false,\"FromPath\":[\"coord\"],\"FromType\":\"object\",\"ToKey\":\"coord\",\"ToType\":\"object\"},{\"Dropped\":false,\"FromPath\":[\"weather\"],\"FromType\":\"array\",\"ToKey\":\"weather\",\"ToType\":\"array\"},{\"Dropped\":false,\"FromPath\":[\"base\"],\"FromType\":\"string\",\"ToKey\":\"base\",\"ToType\":\"string\"},{\"Children\":[{\"Dropped\":false,\"FromPath\":[\"main\",\"temp\"],\"FromType\":\"double\",\"ToKey\":\"temp\",\"ToType\":\"double\"},{\"Dropped\":false,\"FromPath\":[\"main\",\"feels_like\"],\"FromType\":\"double\",\"ToKey\":\"feels_like\",\"ToType\":\"double\"},{\"Dropped\":false,\"FromPath\":[\"main\",\"temp_min\"],\"FromType\":\"double\",\"ToKey\":\"temp_min\",\"ToType\":\"double\"},{\"Dropped\":false,\"FromPath\":[\"main\",\"temp_max\"],\"FromType\":\"double\",\"ToKey\":\"temp_max\",\"ToType\":\"double\"},{\"Dropped\":false,\"FromPath\":[\"main\",\"pressure\"],\"FromType\":\"int\",\"ToKey\":\"pressure\",\"ToType\":\"int\"},{\"Dropped\":false,\"FromPath\":[\"main\",\"humidity\"],\"FromType\":\"int\",\"ToKey\":\"humidity\",\"ToType\":\"int\"},{\"Dropped\":false,\"FromPath\":[\"main\",\"sea_level\"],\"FromType\":\"int\",\"ToKey\":\"sea_level\",\"ToType\":\"int\"},{\"Dropped\":false,\"FromPath\":[\"main\",\"grnd_level\"],\"FromType\":\"int\",\"ToKey\":\"grnd_level\",\"ToType\":\"int\"}],\"Dropped\":false,\"FromPath\":[\"main\"],\"FromType\":\"object\",\"ToKey\":\"main\",\"ToType\":\"object\"},{\"Dropped\":false,\"FromPath\":[\"visibility\"],\"FromType\":\"int\",\"ToKey\":\"visibility\",\"ToType\":\"int\"},{\"Children\":[{\"Dropped\":false,\"FromPath\":[\"wind\",\"speed\"],\"FromType\":\"double\",\"ToKey\":\"speed\",\"ToType\":\"double\"},{\"Dropped\":false,\"FromPath\":[\"wind\",\"deg\"],\"FromType\":\"int\",\"ToKey\":\"deg\",\"ToType\":\"int\"},{\"Dropped\":false,\"FromPath\":[\"wind\",\"gust\"],\"FromType\":\"double\",\"ToKey\":\"gust\",\"ToType\":\"double\"}],\"Dropped\":false,\"FromPath\":[\"wind\"],\"FromType\":\"object\",\"ToKey\":\"wind\",\"ToType\":\"object\"},{\"Children\":[{\"Dropped\":false,\"FromPath\":[\"clouds\",\"all\"],\"FromType\":\"int\",\"ToKey\":\"all\",\"ToType\":\"int\"}],\"Dropped\":false,\"FromPath\":[\"clouds\"],\"FromType\":\"object\",\"ToKey\":\"clouds\",\"ToType\":\"object\"},{\"Dropped\":false,\"FromPath\":[\"dt\"],\"FromType\":\"int\",\"ToKey\":\"dt\",\"ToType\":\"int\"},{\"Children\":[{\"Dropped\":false,\"FromPath\":[\"sys\",\"type\"],\"FromType\":\"int\",\"ToKey\":\"type\",\"ToType\":\"int\"},{\"Dropped\":false,\"FromPath\":[\"sys\",\"id\"],\"FromType\":\"int\",\"ToKey\":\"id\",\"ToType\":\"int\"},{\"Dropped\":false,\"FromPath\":[\"sys\",\"country\"],\"FromType\":\"string\",\"ToKey\":\"country\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"sys\",\"sunrise\"],\"FromType\":\"int\",\"ToKey\":\"sunrise\",\"ToType\":\"int\"},{\"Dropped\":false,\"FromPath\":[\"sys\",\"sunset\"],\"FromType\":\"int\",\"ToKey\":\"sunset\",\"ToType\":\"int\"}],\"Dropped\":false,\"FromPath\":[\"sys\"],\"FromType\":\"object\",\"ToKey\":\"sys\",\"ToType\":\"object\"},{\"Dropped\":false,\"FromPath\":[\"timezone\"],\"FromType\":\"int\",\"ToKey\":\"timezone\",\"ToType\":\"int\"},{\"Dropped\":false,\"FromPath\":[\"id\"],\"FromType\":\"int\",\"ToKey\":\"id\",\"ToType\":\"int\"},{\"Dropped\":false,\"FromPath\":[\"name\"],\"FromType\":\"string\",\"ToKey\":\"name\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"cod\"],\"FromType\":\"int\",\"ToKey\":\"cod\",\"ToType\":\"int\"},{\"Dropped\":false,\"FromPath\":[\"city\"],\"FromType\":\"string\",\"ToKey\":\"city\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"year\"],\"FromType\":\"string\",\"ToKey\":\"year\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"month\"],\"FromType\":\"string\",\"ToKey\":\"month\",\"ToType\":\"string\"},{\"Dropped\":false,\"FromPath\":[\"day\"],\"FromType\":\"string\",\"ToKey\":\"day\",\"ToType\":\"string\"}],\"Name\":\"Change Schema\"}},\"node-1764553912282\":{\"S3GlueParquetTarget\":{\"AutoDataQuality\":{\"EvaluationContext\":\"EvaluateDataQuality_node1764553546844\",\"IsEnabled\":true},\"Compression\":\"snappy\",\"Inputs\":[\"node-1764621313640\"],\"Name\":\"Amazon S3\",\"NumberTargetPartitions\":\"0\",\"PartitionKeys\":[],\"Path\":\"s3://bucket-nhx-main/project-openweathermap/clean/\",\"SchemaChangePolicy\":{\"EnableUpdateCatalog\":false}}}}",
+  "sourceControlDetails" : {
+    "provider" : "GITHUB",
+    "repository" : "project-openweathermap",
+    "branch" : "main",
+    "folder" : "project_openweathermap_raw_json_to_parquet"
+  }
+}
