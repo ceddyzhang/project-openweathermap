@@ -1,0 +1,49 @@
+#API documentation: https://openweathermap.org/current
+
+import os
+import json
+import requests
+import boto3
+from datetime import datetime
+
+def getcurrentweatherfromopenweather(mycity: str):
+    myapikey='48e575ef500b87f503c58572a69bbd03'
+    mycity = mycity.lower()
+    #url=f"https://api.openweathermap.org/data/2.5/weather?q=London,uk&APPID={myapikey}"
+    #print(url)
+    myurl='https://api.openweathermap.org/data/2.5/weather'
+    myparams={'appid':myapikey,'q':mycity}
+    
+    myresponse=requests.get(url=myurl,params=myparams)
+    
+    try:
+        myresponse.raise_for_status()
+        myresponsejson=myresponse.json()
+    except Exception as myexception:
+        print('Error:', myexception)
+        return
+        #sys.exit(1)
+    
+    ans=myresponsejson
+    print(f"Response received for {mycity}: {ans}")
+    return ans
+
+def citycurrentweathertos3(mycity: str, responsejson: str):
+    #aws credentials file path: os.environ['AWS_SHARED_CREDENTIALS_FILE'] = 'aws/credentials' 
+
+    mycity=mycity.lower()
+    mys3 = boto3.client("s3")
+    mybucket = 'bucket-nhx-main'
+    mytimestamp = datetime.utcfromtimestamp(responsejson['dt'])
+    #file path does not like :
+    myfilepath = f"project-openweathermap/raw/city={mycity}/year={mytimestamp.strftime('%Y')}/month={mytimestamp.strftime('%m')}/day={mytimestamp.strftime('%d')}/{mytimestamp.strftime('%H')}_{mytimestamp.strftime('%M')}_{mytimestamp.strftime('%S')}.json"
+    mys3.put_object(Bucket=mybucket,Key=myfilepath,Body=json.dumps(responsejson).encode("utf-8"))
+    print(f"Successfully put file {myfilepath} in S3")
+
+def lambda_handler(event, context):
+    cities = ['mississauga,ontario']
+    for city in cities:
+        data = getcurrentweatherfromopenweather(city)
+        if data:
+            citycurrentweathertos3(city, data)
+    return {"status": "success"}
